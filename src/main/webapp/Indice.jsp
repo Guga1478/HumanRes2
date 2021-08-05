@@ -1,0 +1,785 @@
+<%-- 
+    Document   : Indice
+    Created on : Apr 12, 2021, 12:27:00 AM
+    Author     : GUSATAVO
+--%>
+
+<%@page import="ar.com.java.humanRes.entities.Jobs"%>
+<%@page import="ar.com.java.humanRes.entities.Employees"%>
+<%@page import="ar.com.java.humanRes.entities.Countries"%>
+<%@page import="ar.com.java.humanRes.entities.Regions"%>
+<%@page import="ar.com.java.humanRes.entities.Departments"%>
+<%@page import="ar.com.java.humanRes.entities.Locations"%>
+<%@page import="ar.com.java.humanRes.entities.Locations"%>
+<%@page import="ar.com.java.humanRes.repositories.jdbc.JobsRepository"%>
+<%@page import="ar.com.java.humanRes.repositories.interfaces.I_JobsRepository"%>
+<%@page import="ar.com.java.humanRes.repositories.interfaces.I_JobsRepository"%>
+<%@page import="ar.com.java.humanRes.repositories.jdbc.EmployeesRepository"%>
+<%@page import="ar.com.java.humanRes.repositories.interfaces.I_EmployeesRepository"%>
+<%@page import="ar.com.java.humanRes.repositories.interfaces.I_EmployeesRepository"%>
+<%@page import="ar.com.java.humanRes.repositories.jdbc.RegionsRepository"%>
+<%@page import="ar.com.java.humanRes.repositories.interfaces.I_RegionsRepository"%>
+<%@page import="ar.com.java.humanRes.repositories.interfaces.I_RegionsRepository"%>
+<%@page import="ar.com.java.humanRes.repositories.jdbc.CountriesRepository"%>
+<%@page import="ar.com.java.humanRes.repositories.jdbc.CountriesRepository"%>
+<%@page import="ar.com.java.humanRes.repositories.interfaces.I_CountriesRepository"%>
+<%@page import="ar.com.java.humanRes.repositories.interfaces.I_CountriesRepository"%>
+<%@page import="ar.com.java.humanRes.repositories.jdbc.LocationsRepository"%>
+<%@page import="ar.com.java.humanRes.repositories.interfaces.I_LocationsRepository"%>
+<%@page import="ar.com.java.humanRes.repositories.interfaces.I_LocationsRepository"%>
+<%@page import="ar.com.java.humanRes.repositories.interfaces.I_LocationsRepository"%>
+<%@page import="ar.com.java.humanRes.connectors.Connector"%>
+<%@page import="ar.com.java.humanRes.connectors.Connector"%>
+<%@page import="ar.com.java.humanRes.repositories.jdbc.DepartmentsRepository"%>
+<%@page import="ar.com.java.humanRes.repositories.jdbc.DepartmentsRepository"%>
+<%@page import="ar.com.java.humanRes.repositories.interfaces.I_DepartmentsRepository"%>
+<%@page import="ar.com.java.humanRes.repositories.interfaces.I_DepartmentsRepository"%>
+<%@page import="ar.com.java.humanRes.utils.html.HtmlTable"%>
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.Connection"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%I_DepartmentsRepository dr = new DepartmentsRepository(Connector.getConnection());%>
+<%I_LocationsRepository lr = new LocationsRepository(Connector.getConnection());%>
+<%I_CountriesRepository cr = new CountriesRepository(Connector.getConnection());%>
+<%I_RegionsRepository rr = new RegionsRepository(Connector.getConnection());%>
+<%I_EmployeesRepository er = new EmployeesRepository(Connector.getConnection());%>
+<%I_JobsRepository jr = new JobsRepository(Connector.getConnection());%>
+<%@page session="true"%>
+<!DOCTYPE html>
+<html>
+    <style>
+        html{
+            background-size: auto;
+            min-height: 100%;
+            background-color: #cccccc;
+        }
+
+        body{
+            background-image: url("CSS/Imagenes/background.jpg");
+            background-color: #007bff; 
+        }
+
+        #advanced-search-form{
+            background-size: auto;
+            background-color: lightcyan;
+            max-width: 1200px;
+            margin: auto auto auto;
+            padding:auto;
+            color: #858b8e;
+            box-shadow: 40px 6px 40px rgba(0,0,0,0.2);
+        }
+
+        #advanced-search-form h2{
+            padding-bottom: 20px;
+            margin: 10px 10px;
+            font-size: 24px;
+        }
+
+        #advanced-search-form hr{
+            margin-top: 38px;
+            margin-bottom: 54px;
+            margin-left:3px;
+            border: 1px solid #cccccc;
+
+        }
+
+        #advanced-search-form .form-group{
+            margin-bottom: 20px;
+            margin-left:5px;
+            width: 30%;
+            float:left;
+            text-align: left;
+        }
+
+        #advanced-search-form .form-control{
+            padding: 12px 20px;
+            height: auto;
+            border-radius: 2px;
+        }
+
+        #advanced-search-form .radio-inline{
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+
+        #advanced-search-form .gender{
+            width: 30%;
+            margin-top: 30px;
+            padding-left: 20px;
+            padding-top: 10px;
+            padding-bottom: 5px;
+        }
+
+        #advanced-search-form .btn{
+            width: 46%;
+            margin: 20px auto 0;
+            display: block;
+            outline: none;
+        }
+
+        @media screen and (max-width: 800px){
+            #advanced-search-form .form-group{
+                width: 55%;
+            }
+
+            #advanced-search-form{
+                margin-top: 0;
+            }
+        }
+
+        @media screen and (max-width: 560px){
+            #advanced-search-form .form-group{
+                width: 100%;
+                margin-left: 0;
+            }
+
+            #advanced-search-form h2{
+                text-align: center;
+            }
+
+            #table{
+                text-align: left;
+                table-layout: fixed;
+                width: 100px;
+                border-color: #c82333;
+            }
+
+        }
+    </style>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="styles.css">
+        <title>Indice</title>
+    </head>
+    <body>
+        <div class="container" id="advanced-search-form">
+            <%
+                HttpSession sesion = request.getSession();
+                String usuario;
+                String nivel;
+                if (session.getAttribute("user") != null && session.getAttribute("nivel") != null) {
+                    usuario = session.getAttribute("user").toString();
+                    nivel = session.getAttribute("nivel").toString();
+                    out.print("<a href='Login.jsp?cerrar=true'><h5>Cerrar Sesion " + usuario + "</h5></a>");
+                } else {
+                    out.print("<script>location.replace('Login.jsp');</script>");
+                }
+
+            %>
+            <h1>Tablero de Gestion</h1>
+
+            <img src="CSS/Imagenes/organigrama.png" alt=""/>
+            <h2>Departments Data Control</h2>
+            <form>
+                <div class="form-group">
+                    <label for="departmentId">Id:</label>
+                    <input type="number" class="form-control" placeholder="Id" name="departmentId" id="departmentId">
+                </div>
+                <div class="form-group">
+                    <label for="departmentName">Department Name</label>
+                    <input type="text" class="form-control" placeholder="Department Name" name="departmentName" id="departmentName">
+                </div>
+                <div class="form-group">
+                    <label for="firstName">Manager Id</label>
+                    <input type="number" class="form-control" placeholder="Manager Id" name="managerId" id="managerId">
+                </div>
+                <div class="form-group">
+                    <label for="locationId">Location Id</label>
+                    <select class="form-control" name="locationId">
+                        <%                                for (Locations l : lr.getAll())
+                                out.println("<option value=" + l.getLocationId() + ">"
+                                        + l.getLocationId() + ", " + l.getCountryId() + ", "
+                                        + l.getStreetAddress() + "</option>");
+                        %>
+                    </select>    
+                </div>
+                <div class="clearfix"></div>
+                <button type="submit" class="btn btn-info btn-lg btn-responsive" id="Guardar" value="Guardar"> <span class="glyphicon glyphicon-search"></span> Guardar</button> 
+            </form>    
+            <%
+                try {
+                    int departmentId = Integer.parseInt(request.getParameter("departmentId"));
+                    String departmentName = request.getParameter("departmentName");
+                    int managerId = Integer.parseInt(request.getParameter("managerId"));
+                    int locationId = Integer.parseInt(request.getParameter("locationId"));
+
+                    if (departmentName == null || departmentName.isEmpty() || departmentName.contains("<")) {
+                        out.println("<h4>Ingresar datos</h4>");
+                    } else {
+                        Departments departments = new Departments(departmentName, managerId, locationId);
+                        dr.save(departments);
+                        if (departments.getDepartmentId() != 0) {
+                            out.println("<h4>Se ha ingresado el Department id:" + departments.getDepartmentId() + "</h4>");
+                        } else {
+                            out.println("<h4>No se pudo guardar el Department</h4>");
+                        }
+                    }
+                } catch (NullPointerException | NumberFormatException e) {
+                    out.println("<h4>Ingresar datos del nuevo Department</h4>");
+                } catch (Exception e) {
+                    out.println("<h3>Ocurrio un error!!</h3>");
+                    System.out.println("*****************************************");
+                    System.out.println(e);
+                    System.out.println("*****************************************");
+                }
+            %>       
+
+            <%
+                Connection conn;
+                String driver = "com.mysql.cj.jdbc.Driver";
+                String url = "jdbc:mysql://localhost:3306/humanresources";
+                String user = "root";
+                String pass = "Amelia2015";
+                Class.forName(driver);
+                conn = DriverManager.getConnection(url, user, pass);
+                PreparedStatement ps;
+                ResultSet rs;
+                ps = conn.prepareStatement("select * from departments");
+                rs = ps.executeQuery();
+            %>
+            <div class="table-responsive">
+                <h2>Departments List Control</h2>
+                <table class="table table-bordered">
+                    <tr>
+                        <th class="danger" text="departmentId" name="departmentId">Department Id</th>
+                        <th class="danger" text="departmentName" name="departmentName">Department Name</th>
+                        <th class="danger" text="managerId" name="managerId">Manager Id</th>
+                        <th class="danger" text="locationId" name="locationId">Location Id</th>
+                    </tr>
+                    <%
+                        while (rs.next()) {
+                    %>
+                    <tr>
+                        <td class="active"><%= rs.getInt("departmentId")%></td>
+                        <td class="success"><%= rs.getString("departmentName")%></td>
+                        <td class="warning"><%= rs.getInt("managerId")%></td>
+                        <td class="active"><%= rs.getInt("locationId")%></td>
+                    </tr>
+                    <%
+                        }
+                    %>
+                </table>
+            </div>                 
+
+            <form>
+                Buscar Department:<input type="text" name="buscarDepartments" />
+            </form>
+<div class="container" id="advanced-search-form">
+        <img src="CSS/Imagenes/mundo4.png" alt="" class="img-circle"/>
+            <h2>Countries Data Control</h2>
+            <form>
+                <div class="form-group">
+                    <label for="countryId">Country Id</label>
+                    <input type="text" class="form-control" placeholder="Country Id" name="countryId" id="countryId">
+                </div>
+                <div class="form-group">
+                    <label for="countryName">Country Name</label>
+                    <input type="text" class="form-control" placeholder="Country Name" name="countryName" id="countryName">
+                </div>
+                <div class="form-group">
+                    <label for="regionId">Region Id</label>
+                    <select class="form-control" name="regionId">
+                        <%                                for (Regions r : rr.getAll())
+                                out.println("<option value=" + r.getRegionId() + ">"
+                                        + r.getRegionId() + ", " + r.getRegionName() + "</option>");
+                        %>
+                    </select>    
+                </div>
+                <div class="form-group">
+                    <label for="countryNumber">Country Number</label>
+                    <input type="number" class="form-control" placeholder="Country Number" name="countryNumber" id="countryNumber">
+                </div>                   
+                <div class="clearfix"></div>
+                <button type="submit" class="btn btn-info btn-lg btn-responsive" id="Guardar" value="Guardar"> <span class="glyphicon glyphicon-search"></span> Guardar</button> 
+            </form>        
+
+        <%
+            try {
+                String countryId = request.getParameter("countryId");
+                String countryName = request.getParameter("countryName");
+                int regionId = Integer.parseInt(request.getParameter("regionId"));
+
+                if (countryId == null || countryId.isEmpty() || countryName == null
+                        || countryName.isEmpty() || countryId.contains("<") || countryName.contains("<")) {
+                    out.println("<h4>Ingresar datos</h4>");
+                } else {
+                    Countries countries = new Countries(countryId, countryName, regionId);
+                    cr.save(countries);
+                    if (countries.getCountryNumber() != 0) {
+                        out.println("<h4>Se ha guardado el Country:" + countries.getCountryNumber() + "</h4>");
+                    } else {
+                        out.println("<h4>No se pudo guardar el Country</h4>");
+                    }
+                }
+            } catch (NullPointerException | NumberFormatException e) {
+                out.println("<h4>Ingresar datos del nuevo Country</h4>");
+            } catch (Exception e) {
+                out.println("<h4>Ocurrio un error!!</h4>");
+                System.out.println("*****************************************");
+                System.out.println(e);
+                System.out.println("*****************************************");
+            }
+        %>
+        
+             <%
+            
+            Class.forName(driver);
+            conn=DriverManager.getConnection(url, user, pass);
+            ps=conn.prepareStatement("select * from countries");
+            rs=ps.executeQuery();
+            %>
+            <div class="table-responsive">
+                <h2>Countries Data List</h2>
+                <table class="table table-bordered">
+                    <tr>
+                        <th class="danger" text="countryId" name="countryId">Country Id</th>
+                        <th class="danger" text="countryName" name="countryName">Country Name</th>`
+                        <th class="danger" text="regionId" name="regionId">Region Id</th>
+                        <th class="danger" text="countryNumber" name="countryNumber">Country Number</th>
+                    </tr>    
+                    <%
+                        while (rs.next()) {
+                    %>
+                    <tr>    
+                        <td class="active"><%= rs.getString("countryId")%></td>
+                        <td class="success"><%= rs.getString("countryName")%></td>
+                        <td class="active"><%= rs.getString("regionId")%></td>
+                        <td class="success"><%= rs.getInt("countryNumber")%></td>
+                    </tr>
+                    <%
+                        }
+                    %>
+                </table>
+            </div>        
+                   
+        <form>
+            Buscar Country:<input type="text" name="buscarCountry" />
+        </form>
+        <%
+            String buscarCountry = request.getParameter("buscarCountry");
+                out.println(new HtmlTable().getTable(cr.getLikeCountryName(buscarCountry)));
+        %>
+    </div>
+    <div class="container" id="advanced-search-form">    
+        <img src="CSS/Imagenes/empleados2.jpg" alt=""/>
+        <h2>Employees List</h2>
+        <form>
+            <div class="form-group">
+                <label for="employeeId">Id:</label>
+                <input type="text" class="form-control" placeholder="Id" name="employeeId" id="employeeId">
+            </div>
+            <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input type="text" class="form-control" placeholder="First Name" name="firstName" id="firstName">
+            </div>
+            <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input type="text" class="form-control" placeholder="Last Name" name="lastName" id="lastName">
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" placeholder="Email" name="email" id="email">
+            </div>
+            <div class="form-group">
+                <label for="phoneNumber">Phone Number</label>
+                <input type="phone" class="form-control" placeholder="Phone Number" name="phoneNumber" id="phoneNumber">
+            </div>
+            <div class="form-group">
+                <label for="hireDate">Hire Date</label>
+                <input type="text" class="form-control" placeholder="Hire Date" name="hireDate" id="hireDate">
+            </div>
+            <div class="form-group">
+                <label for="jobId">Job Id</label>
+                <input type="text" class="form-control" placeholder="Job Id" name="jobId" id="jobId">
+            </div>
+            <div class="form-group">
+                <label for="salary">Salary</label>
+                <input type="number" class="form-control" placeholder="Salary" name="salary" id="salary">
+            </div>
+            <div class="form-group">
+                <label for="commissionPct">Commission Pct</label>
+                <input type="number" class="form-control" placeholder="Commission Pct" name="commisionPct" id="commissionPct">
+            </div>
+            <div class="form-group">
+                <label for="managerId">Manager Id</label>
+                <input type="text" class="form-control" placeholder="Manager Id" name="managerId" id="managerId">
+            </div>
+            <div class="form-group">
+                <label for="departmentId">Department Id</label>
+                <input type="text" class="form-control" placeholder="Department Id" name="departmentId" id="departmentId">
+            </div>
+            <div class="clearfix"></div>
+            <button type="submit" class="btn btn-info btn-lg btn-responsive" id="Guardar" value="Guardar"> <span class="glyphicon glyphicon-search"></span> Guardar</button>
+
+
+            <%
+                try {
+                    String firstName = request.getParameter("firstName");
+                    String lastName = request.getParameter("lastName");
+                    String email = request.getParameter("email");
+                    String phoneNumber = request.getParameter("phoneNumber");
+                    String hireDate = request.getParameter("hireDate");
+                    String jobId = request.getParameter("jobId");
+                    int salary = Integer.parseInt(request.getParameter("salary"));
+                    int commisionPct = Integer.parseInt(request.getParameter("commisionPct"));
+                    int managerId = Integer.parseInt(request.getParameter("managerId"));
+                    int departmentId = Integer.parseInt(request.getParameter("departmentId"));
+
+                    if (firstName == null || firstName.isEmpty() || lastName == null || lastName.isEmpty()
+                            || email == null || email.isEmpty() || phoneNumber == null || phoneNumber.isEmpty()
+                            || hireDate == null || hireDate.isEmpty() || jobId == null || jobId.isEmpty()
+                            || firstName.contains("<") || lastName.contains("<") || email.contains("<") || email.contains("<")
+                            || phoneNumber.contains("<") || hireDate.contains("<") || jobId.contains("<")) {
+                        out.println("<h3>Ingresar datos</h3>");
+                    } else {
+                        Employees employees = new Employees(firstName, lastName, email, phoneNumber, hireDate, jobId, salary, commisionPct, managerId, departmentId);
+                        er.save(employees);
+                        if (employees.getEmployeeId() != 0) {
+                            out.println("<h3>Se guardo el Employee id:" + employees.getEmployeeId() + "</h3>");
+                        } else {
+                            out.println("<h3>No se pudo guardar el Employee</h3>");
+                        }
+
+                    }
+                } catch (NullPointerException | NumberFormatException e) {
+                    out.println("<h3>Ingresar datos del nuevo Employee</h3>");
+                } catch (Exception e) {
+                    out.println("<h3>Ocurrio un error!!</h3>");
+                    System.out.println("*****************************************");
+                    System.out.println(e);
+                    System.out.println("*****************************************");
+                }
+
+
+            %>
+
+            <%                   Class.forName(driver);
+                conn = DriverManager.getConnection(url, user, pass);
+                ps = conn.prepareStatement("select * from employees");
+                rs = ps.executeQuery();
+            %>
+            <div class="table-responsive">
+                <h2>Employees List</h2>
+                <table class="table table-bordered">
+                    <tr>
+                        <th class="danger" text="employeeId" name="employeeId">Employee Id</th>
+                        <th class="danger" text="firstName" name="firstName">First Name</th>
+                        <th class="danger" text="lastName" name="lastName">Last Name</th>
+                        <th class="danger" text="email" name="email">Email</th>
+                        <th class="danger" text="phoneNumber" name="phoneNumber">Phone Number</th>
+                        <th class="danger" text="hireDate" name="hireDate">Hire Date</th>
+                        <th class="danger" text="jobId" name="jobId">Job Id</th>
+                        <th class="danger" text="salary" name="salary">Salary</th>
+                        <th class="danger" text="commisionPct" name="commisionPct">Commission</th>
+                        <th class="danger" text="managerId" name="managerId">Manager Id</th>
+                        <th class="danger" text="departmentId" name="departmentId">Department Id</th>
+
+                    </tr>
+                    <%
+                        while (rs.next()) {
+                    %>
+                    <tr>
+                        <td class="active"><%= rs.getInt("employeeId")%></td>
+                        <td class="active"><%= rs.getString("firstName")%></td>
+                        <td class="active"><%= rs.getString("lastName")%></td>
+                        <td class="success"><%= rs.getString("email")%></td>
+                        <td class="success"><%= rs.getString("phoneNumber")%></td>
+                        <td class="success"><%= rs.getString("hireDate")%></td>
+                        <td class="success"><%= rs.getString("jobId")%></td>
+                        <td class="success"><%= rs.getInt("salary")%></td>
+                        <td class="active"><%= rs.getInt("commisionPct")%></td>
+                        <td class="active"><%= rs.getInt("managerId")%></td>
+                        <td class="active"><%= rs.getInt("departmentId")%></td>
+                    </tr>
+                    <%
+                        }
+                    %>
+                </table>
+            </div>     
+            <form>
+                Buscar Empleado:<input type="text" name="buscarEmployee" />
+            </form>
+            <%        String buscarEmployee = request.getParameter("buscarEmployee");
+                // if (buscarEmployee == null || buscarEmployee.isEmpty()) {//
+                //   out.println(new HtmlTable().getTable(er.getAll()));//
+                // } else {//
+                out.println(new HtmlTable().getTable(er.getLikeLastName(buscarEmployee)));
+
+            %>    
+    </div>
+    <div class="container" id="advanced-search-form">
+    <h2>Jobs Control List</h2>
+            <form>
+                <div class="form-group">
+                    <label for="jobId">Job Id:</label>
+                    <input type="text" class="form-control" placeholder="Job Id" name="jobId" id="jobId">
+                </div>
+                <div class="form-group">
+                    <label for="jobTitle">Job Title:</label>
+                    <input type="text" class="form-control" placeholder="Job Title" name="jobTitle" id="jobTitle">
+                </div>
+                <div class="form-group">
+                    <label for="minSal">Min Salary</label>
+                    <input type="number" class="form-control" placeholder="Min Salary" name="minSalary" id="minSal">
+                </div>
+                <div class="form-group">
+                    <label for="maxSal">Max Salary</label>
+                    <input type="number" class="form-control" placeholder="Max Salary" name="maxSalary" id="maxSal">
+                </div>
+                <div class="form-group">
+                    <label for="controlNumber">Control Number:</label>
+                    <input type="number" class="form-control" placeholder="Control Number" name="controlNumber" id="controlNumber">
+                </div>
+                <div class="clearfix"></div>
+                <button type="submit" class="btn btn-info btn-lg btn-responsive" id="Guardar" value="Guardar"> <span class="glyphicon glyphicon-search"></span> Guardar</button>
+            </form>
+        <%            try {
+                String jobId = request.getParameter("jobId");
+                String jobTitle = request.getParameter("jobTitle");
+                int minSalary = Integer.parseInt(request.getParameter("minSalary"));
+                int maxSalary = Integer.parseInt(request.getParameter("maxSalary"));
+                int controlNumber = Integer.parseInt(request.getParameter("controlNumber"));
+
+                if (jobId == null || jobId.isEmpty() || jobTitle == null
+                        || jobTitle.isEmpty() || jobId.contains("<") || jobTitle.contains("<")) {
+                    out.println("<h4>Ingresar datos</h4>");
+                } else {
+                    Jobs jobs = new Jobs(jobId, jobTitle, minSalary, maxSalary);
+                    jr.save(jobs);
+                    if (jobs.getControlNumber() != 0) {
+                        out.println("<h4>Se ha guardado la informacion" + jobs.getControlNumber() + "</h4>");
+                    }
+                }
+            } catch (NullPointerException | NumberFormatException e) {
+                out.println("<h4>Ingresar datos </h4>");
+            } catch (Exception e) {
+                out.println("<h4>Ocurrio un error!!</h4>");
+                System.out.println("*****************************************");
+                System.out.println(e);
+                System.out.println("*****************************************");
+            }
+
+
+        %>
+        
+        <%         
+                Class.forName(driver);
+                conn = DriverManager.getConnection(url, user, pass);
+                ps = conn.prepareStatement("select * from jobs");
+                rs = ps.executeQuery();
+            %>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <tr>
+                        <th class="danger" text="jobId" name="jobId">Job Id</th>
+                        <th class="danger" text="jobTitle" name="jobTitle">Job Title</th>
+                        <th class="danger" text="minSalary" name="minSalary">Min Salary</th>
+                        <th class="danger" text="maxSalary" name="maxSalary">Max Salary</th>
+                        <th class="danger" text="controlNumber" name="controlNumber">Control Number</th>
+                    </tr>
+                    <%
+                        while (rs.next()) {
+                    %>
+                    <tr>
+                        <td class="active"><%= rs.getString("jobId")%></td>
+                        <td class="success"><%= rs.getString("jobTitle")%></td>
+                        <td class="warning"><%= rs.getInt("minSalary")%></td>
+                        <td class="active"><%= rs.getInt("maxSalary")%></td>
+                        <td class="success"><%= rs.getInt("controlNumber")%></td>
+                    </tr>
+                    <%
+                        }
+                    %>
+                </table>
+            </div>     
+        
+        <form>
+            Buscar Jobs:<input type="text" name="buscarJobs" />
+        </form>
+        <%        String buscarJobs = request.getParameter("buscarJobs");
+                out.println(new HtmlTable().getTable(jr.getLikeJobTitle(buscarJobs)));
+        %>
+    </div>
+     <div class="container" id="advanced-search-form"> 
+    <h2>Locations Data Control</h2>
+        <form>
+            <div class="form-group">
+                    <label for="locationId">Location Id</label>
+                    <input type="number" class="form-control" placeholder="Location Id" name="locationId" id="locationId">
+                </div>
+            <div class="form-group">
+                    <label for="streetAddress">Street Address</label>
+                    <input type="text" class="form-control" placeholder="Street Address" name="streetAddress" id="streetAddress">
+                </div>
+            <div class="form-group">
+                    <label for="postalCode">Postal Code</label>
+                    <input type="text" class="form-control" placeholder="Postal Code" name="postalCode" id="postalCode">
+                </div>
+            <div class="form-group">
+                    <label for="city">City</label>
+                    <input type="text" class="form-control" placeholder="City" name="city" id="city">
+                </div>
+            <div class="form-group">
+                    <label for="stateProvince">State Province</label>
+                    <input type="text" class="form-control" placeholder="State Province" name="stateProvince" id="stateProvince">
+                </div>
+            <div class="form-group">
+                    <label for="countryId">Country Id</label>
+                    <select class="form-control" name="countryId">
+                    <%
+                                for(Countries c: cr.getAll())
+                                out.println("<option value="+ c.getCountryId()+">"+
+                                c.getCountryId()+", "+c.getCountryName()+"</option>");                            
+                            %>
+                        </select>
+                 </div> 
+                <div class="clearfix"></div>
+                <button type="submit" class="btn btn-info btn-lg btn-responsive" id="Guardar" value="Guardar"> <span class="glyphicon glyphicon-search"></span> Guardar</button> 
+        <%
+            try {
+                String streetAddress = request.getParameter("streetAddress");
+                String postalCode = request.getParameter("postalCode");
+                String city = request.getParameter("city");
+                String stateProvince = request.getParameter("stateProvince");
+                String countryId = request.getParameter("countryId");
+
+                if (streetAddress == null || streetAddress.isEmpty() || postalCode == null
+                        || postalCode.isEmpty() || city == null || city.isEmpty() || stateProvince == null
+                        || stateProvince.isEmpty() || countryId == null || countryId.isEmpty() || streetAddress.contains("<") || postalCode.contains("<")
+                        || city.contains("<") || stateProvince.contains("<") || countryId.contains("<")) {
+                    out.println("<h4>Ingresar datos</h4>");
+                } else {
+                    Locations locations = new Locations(streetAddress, postalCode, city, stateProvince, countryId);
+                    lr.save(locations);
+                    if (locations.getLocationId() != 0) {
+                        out.println("<h4>Se guardo la location id:" + locations.getLocationId() + "</h4>");
+                    }
+                }
+            } catch (NullPointerException | NumberFormatException e) {
+                out.println("<h4>Ingresar datos de la nueva Location</h4>");
+            } catch (Exception e) {
+                out.println("<h4>Ocurrio un error!!</h4>");
+                System.out.println("*****************************************");
+                System.out.println(e);
+                System.out.println("*****************************************");
+            }
+        %>                
+       
+        <%       
+                Class.forName(driver);
+                conn = DriverManager.getConnection(url, user, pass);
+                ps = conn.prepareStatement("select * from locations");
+                rs = ps.executeQuery();
+            %>
+     <div class="table-responsive">
+                <h2>Locations List</h2>
+                <table class="table table-bordered">
+                    <tr>
+                        <th class="danger" text="locationId" name="locationId">Location Id</th>
+                        <th class="danger" text="streetAddress" name="streetAddress">Street Address</th>
+                        <th class="danger" text="postalCode" name="postalCode">Postal Code</th>
+                        <th class="danger" text="city" name="city">City</th>
+                        <th class="danger" text="stateProvince" name="stateProvince">State Province</th>
+                        <th class="danger" text="countryId" name="countryId">Country Id</th>
+                    </tr>
+                    <%
+                        while (rs.next()) {
+                    %>
+                    <tr>
+                        <td class="active"><%= rs.getInt("locationId")%></td>
+                        <td class="active"><%= rs.getString("streetAddress")%></td> 
+                        <td class="success"><%= rs.getString("postalCode")%></td>
+                        <td class="success"><%= rs.getString("city")%></td>
+                        <td class="active"><%= rs.getString("stateProvince")%></td>
+                        <td class="active"><%= rs.getString("countryId")%></td>
+                    </tr>
+                    <%
+                        }
+                    %>
+                </table>
+            </div>     
+        <form>
+            Buscar Location:<input type="text" name="buscarLocation" />
+        </form>
+        <%
+            String buscarLocation = request.getParameter("buscarLocation");
+                out.println(new HtmlTable().getTable(lr.getByCity(buscarLocation)));
+        %>
+    </div>
+    <div class="container" id="advanced-search-form">  
+    <h2>Regions Data Control</h2>
+        <form>
+            <div class="form-group">
+                    <label for="region">Region Id:</label>
+                    <input type="text" class="form-control" placeholder="Region Id" name="regionId" id="regionId">
+                </div>
+            <div class="form-group">
+                    <label for="regionName">Region Name</label>
+                    <input type="text" class="form-control" placeholder="Region Name" name="regionName" id="regionName">
+                </div>
+                <div class="clearfix"></div>
+                <button type="submit" class="btn btn-info btn-lg btn-responsive" id="Guardar" value="Guardar"> <span class="glyphicon glyphicon-search"></span> Guardar</button>
+            </form>
+    <%
+        try {
+            int regionId = Integer.parseInt(request.getParameter("regionId"));
+            String regionName = request.getParameter("regionName");
+
+            if (regionName == null || regionName.isEmpty() || regionName.contains("<")) {
+                out.println("<h4>Ingresar datos</h4>");
+            } else {
+                Regions regions = new Regions(regionId, regionName);
+                rr.save(regions);
+                out.println("<h4>Se guardo la Region id:" + regions.getRegionId() + "</h4>");
+            }
+
+        } catch (NullPointerException | NumberFormatException e) {
+            out.println("<h4>Ingresar datos de la nueva Region</h4>");
+        } catch (Exception e) {
+            out.println("<h3>Ocurrio un error!!</h3>");
+            System.out.println("*****************************************");
+            System.out.println(e);
+            System.out.println("*****************************************");
+        }
+    %>
+   
+    <%         
+                Class.forName(driver);
+                conn = DriverManager.getConnection(url, user, pass);
+                ps = conn.prepareStatement("select * from regions");
+                rs = ps.executeQuery();
+            %>
+        <div class="table-responsive">
+                <h2>Regions List</h2>
+                <table class="table table-bordered">
+                    <tr>
+                        <th class="danger" text="regionId" name="regionId">Region Id</th>
+                        <th class="danger" text="regionName" name="regionName">Region Name</th>
+                    </tr>
+                    <%
+                        while (rs.next()) {
+                    %>
+                    <tr>
+                        <td class="active"><%= rs.getInt("regionId")%></td>
+                        <td class="success"><%= rs.getString("regionName")%></td>    
+                    </tr>
+                    <%
+                        }
+                    %>
+                </table>
+            </div>     
+    <form>
+        Buscar Region:<input type="text" name="buscarRegion" />
+    </form>
+    <%
+        String buscarRegion = request.getParameter("buscarRegion");
+            out.println(new HtmlTable().getTable(rr.getLikeRegionName(buscarRegion)));
+    %>
+    </div>
+    </div>   
+</body>
+</html>
+
